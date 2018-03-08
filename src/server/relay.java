@@ -4,6 +4,7 @@ package server;
 import java.io.IOException;
 import java.net.Socket;
 
+/*实现流量转发*/
 public class relay implements Runnable {
     private Socket ssocket;
     private Socket csocket;

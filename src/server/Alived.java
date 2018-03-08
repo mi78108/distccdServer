@@ -1,8 +1,8 @@
 package server;
 
 import java.io.IOException;
-import java.net.Socket;
 
+/*检测客户主机 是否存活*/
 public class Alived implements Runnable {
     boolean isRun = true;
 
@@ -10,11 +10,9 @@ public class Alived implements Runnable {
     public void run() {
         System.out.println("Alived 线程开始！");
         while (isRun) {
-            // System.out.println("存活测试：runing");
-            // System.out.println("联机主机：" + distccServer.clients.size());
             for (controlClientSocket ccs : distccServer.clients) {
-                //   System.out.println(csocket.getRemoteSocketAddress() + " port:" + csocket.getPort());
                 try {
+                    /*通过判断发送紧急位 确定是否在线 */
                     ccs.socket.sendUrgentData(0xff);
                 } catch (IOException e) {
                     System.out.println("control-Client:服务器 断线！");
@@ -29,6 +27,7 @@ public class Alived implements Runnable {
             }
 
             for (distccdRelay dr : distccServer.actions.values()) {
+                /*判断提供distccd 服务的服务器 是否掉线*/
                 for (distccdServerSocket dss : dr.distccdServerSockets) {
                     //   System.out.println(csocket.getRemoteSocketAddress() + " port:" + csocket.getPort());
                     try {
@@ -46,7 +45,6 @@ public class Alived implements Runnable {
                     }
 
                     for (distccdClientSocket dcs : dr.distccdClientSockets) {
-                        //   System.out.println(csocket.getRemoteSocketAddress() + " port:" + csocket.getPort());
                         try {
                             dcs.socket.sendUrgentData(0xff);
                         } catch (IOException e) {
@@ -63,9 +61,8 @@ public class Alived implements Runnable {
                     }
                 }
             }
-            //  System.out.println("done");
             try {
-                //    System.out.println("sleep");
+                /*延时 测试 实现类似 心跳包*/
                 Thread.sleep(5000);
                 Thread.yield();
             } catch (InterruptedException e) {

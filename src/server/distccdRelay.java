@@ -3,6 +3,7 @@ package server;
 import java.util.ArrayList;
 import java.util.List;
 
+/*实现流量转发控制*/
 public class distccdRelay {
     String suuid;
     String cuuid;

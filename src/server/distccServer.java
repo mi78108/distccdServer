@@ -9,12 +9,12 @@ import java.net.SocketTimeoutException;
 import java.util.*;
 
 public class distccServer {
+    /*存放在线主机*/
     static List<controlClientSocket> clients = new ArrayList<>();
+    /*存放活动主机uuid和主机对应*/
     static Map<String, Map> ATcs = new HashMap<>();
-    /*static List<String> distccdclientuuid = new ArrayList<>();
-    static List<String> distccdserveruuid = new ArrayList<>();*/
+    /*存放uuid对应的服务活动*/
     static Map<String, distccdRelay> actions = new HashMap<>();
-    //static Map<String, List> distccdServers = new HashMap<>();
 
 
     public static void main(String[] args) throws IOException {
@@ -27,6 +27,7 @@ public class distccServer {
             public void run() {
                 while (true) {
                     try {
+                        /*监听端口*/
                         System.out.println("等待远程连接，端口号为：" + serverControlSocket.getLocalPort() + "...");
                         Socket clientS = serverControlSocket.accept();
                         clientS.setReceiveBufferSize(1024);
@@ -47,7 +48,7 @@ public class distccServer {
                 }
             }
         });
-
+        /*处理链接主机*/
         Thread distccdServer = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -79,7 +80,7 @@ public class distccServer {
                         }
 
                         System.out.println("  --Connect-uuid:" + uuid);
-
+                        /*按照uuid 确定属于某个活动 并存放到特定的map中*/
                         if (uuid != null) {
                             for (Map.Entry<String, Map> entry : ATcs.entrySet()) {
                                 for (Object str : entry.getValue().values()) {
@@ -160,10 +161,6 @@ public class distccServer {
                         System.out.println("\n");
                     }
                     break;
-                // for (controlClientSocket sc : clients) {
-                //   if (sc.isDistccdServer) {
-                //     System.out.println("  --"+sc.socket.getRemoteSocketAddress());
-                // }
             }
         }
         System.out.println("\n\n");

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 
+/*distccd服务提供者对象*/
 public class distccdServerSocket {
     Socket socket;
     boolean isInUse = false;
